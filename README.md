@@ -5,7 +5,7 @@ Portal berita modern yang secara otomatis mengambil dan menampilkan berita terba
 Dibangun menggunakan:
 - ⚛️ React (dengan Vite)
 - 🎨 Tailwind CSS
-- 🌐 Berbagai Public News APIs (NewsAPI, New York Times API, The Guardian API.)
+- 🌐 Berbagai Public News APIs (GNews, New York Times API, The Guardian API.)
 
 ---
 
