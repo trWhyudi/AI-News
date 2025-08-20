@@ -1,18 +1,44 @@
-# 📰 AI News Portal
+# 📰 AI News – Portal Berita Artificial Intelligence
 
-Portal berita modern yang secara otomatis mengambil dan menampilkan berita terbaru seputar **Artificial Intelligence (AI)** dari berbagai sumber terpercaya.
+**AI News** adalah portal berita berbasis web yang secara otomatis menampilkan berita terbaru seputar Artificial Intelligence dari berbagai sumber terpercaya. Dibangun menggunakan React + Tailwind CSS, proyek ini dirancang agar cepat, responsif, dan mudah digunakan.
 
-Dibangun menggunakan:
-- ⚛️ React (dengan Vite)
-- 🎨 Tailwind CSS
-- 🌐 Berbagai Public News APIs (GNews, New York Times API, The Guardian API.)
+Live demo: 👉 [https://ai-news-self.vercel.app/](https://ai-news-self.vercel.app/)
 
 ---
 
-## 🚀 Fitur
+## ✨ Fitur Utama
 
-- 🔍 **Pencarian berita real-time** berdasarkan kata kunci
-- 📱 **Desain responsif** — tampil sempurna di desktop & mobile
-- 📰 Menampilkan judul, waktu terbit, sumber berita, dan link asli
-- ⚡ Fetch data otomatis dari **3 sumber API** berbeda
-- 💡 UI modern, ringan, dan cepat
+- 🔄 Mengambil berita terbaru dari **3 public APIs**:
+  - GNews API
+  - The New York Times API
+  - The Guardian API
+
+- 🧠 Menampilkan:
+  - Judul berita
+  - Tautan ke artikel asli
+  - Waktu publikasi
+  - Deskripsi singkat & gambar (jika tersedia)
+  - Sumber dan penulis berita
+
+- 🔍 **Fitur Pencarian**: cari berita berdasarkan kata kunci seperti “robot”, “machine learning”, dsb.
+
+- 🗂️ **Filter Sumber**: tampilkan berita dari semua atau salah satu sumber.
+
+- ⚡ **Cache Otomatis**:
+  - Caching di memory dan localStorage
+  - Fallback ke cache jika fetch gagal
+
+- 📱 **Desain responsif**: optimal di desktop dan mobile.
+
+- ✨ Animasi scroll menggunakan AOS.
+
+---
+
+## 🛠️ Teknologi
+
+- [React (Vite)](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Axios](https://axios-http.com/)
+- [AOS (Animate On Scroll)](https://michalsnik.github.io/aos/)
+- LocalStorage (untuk caching)
+- JavaScript (ES6+)
