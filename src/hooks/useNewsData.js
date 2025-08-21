@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { fetchNewsData } from '../services/newsApi';
 
 const CACHE_KEY = 'cachedNewsData';
@@ -16,7 +16,7 @@ export const useNewsData = (initialQuery = '') => {
   const debounceTimer = useRef(null);
 
   useEffect(() => {
-    loadCacheOnMount(); // Load cache saat pertama kali mount
+    loadCacheOnMount();
   }, []);
 
   useEffect(() => {
@@ -34,14 +34,12 @@ export const useNewsData = (initialQuery = '') => {
         const parsed = JSON.parse(cached);
         const age = Date.now() - parsed.timestamp;
 
-        // Pakai cache jika masih fresh
         if (age < CACHE_DURATION && (!query || parsed.query === query)) {
           setNews(parsed.data);
           setSources(['all', ...new Set(parsed.data.map(item => item.source))]);
           return;
         }
 
-        // Pakai cache fallback dan update data di background
         if (age < FALLBACK_CACHE_DURATION) {
           setNews(parsed.data);
           setSources(['all', ...new Set(parsed.data.map(item => item.source))]);
@@ -50,7 +48,6 @@ export const useNewsData = (initialQuery = '') => {
         }
       }
 
-      // Jika tidak ada cache, load data baru
       if (!query || query === initialQuery) loadNews();
     } catch {
       loadNews();
@@ -63,7 +60,6 @@ export const useNewsData = (initialQuery = '') => {
       if (!backgroundUpdate) setLoading(true);
       setError(null);
 
-      // Cek cache sebelum fetch (kecuali untuk background update)
       if (!backgroundUpdate) {
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
@@ -76,10 +72,8 @@ export const useNewsData = (initialQuery = '') => {
         }
       }
 
-      // Fetch data terbaru dari API
       const data = await fetchNewsData(query);
 
-      // Simpan data ke cache
       localStorage.setItem(CACHE_KEY, JSON.stringify({
         data,
         timestamp: Date.now(),
@@ -89,7 +83,6 @@ export const useNewsData = (initialQuery = '') => {
       setNews(data);
       setSources(['all', ...new Set(data.map(item => item.source))]);
     } catch {
-      // Jika error, coba gunakan cache fallback
       if (!backgroundUpdate) {
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
@@ -108,8 +101,30 @@ export const useNewsData = (initialQuery = '') => {
     }
   };
 
-  // Filter berita berdasarkan sumber yang dipilih
-  const filteredNews = selectedSource === 'all' ? news : news.filter(item => item.source === selectedSource);
+  // Filter berita berdasarkan query dan sumber
+  const filteredNews = useMemo(() => {
+    let filtered = news;
+    
+    // Filter berdasarkan sumber
+    if (selectedSource !== 'all') {
+      filtered = filtered.filter(item => item.source === selectedSource);
+    }
+    
+    // Filter berdasarkan query pencarian
+    if (query && query.trim()) {
+      const searchTerm = query.toLowerCase().trim();
+      filtered = filtered.filter(item => {
+        return (
+          item.title?.toLowerCase().includes(searchTerm) ||
+          item.description?.toLowerCase().includes(searchTerm) ||
+          item.source?.toLowerCase().includes(searchTerm) ||
+          item.author?.toLowerCase().includes(searchTerm)
+        );
+      });
+    }
+    
+    return filtered;
+  }, [news, selectedSource, query]);
 
   return {
     news: filteredNews,
