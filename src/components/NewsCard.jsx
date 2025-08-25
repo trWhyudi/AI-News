@@ -1,20 +1,26 @@
+import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 
 const NewsCard = ({ article }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
-    <div 
-    className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300"
-    data-aos="fade-up">
+  <div className="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300" data-aos="fade-up">
       {article.imageUrl && (
-        <div className="aspect-video overflow-hidden bg-gray-100">
+        <div className="aspect-video bg-gray-100 relative">
+          {!isLoaded && (
+            <div className="absolute inset-0 animate-pulse bg-gray-200 z-10" />
+          )}
           <img 
-            src={article.imageUrl} 
+            src={article.imageUrl}
             alt={article.title}
-            loading='eager'
-            className="w-full h-full object-cover"
+            loading="eager"
+            className={`w-full h-full object-cover transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setIsLoaded(true)}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = '/placeholder.png';
+              setIsLoaded(true);
             }}
           />
         </div>
