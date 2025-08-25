@@ -11,8 +11,8 @@ export const useNewsData = (initialQuery = '') => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState(initialQuery);
-  const [sources, setSources] = useState(['all']);
-  const [selectedSource, setSelectedSource] = useState('all');
+  const [sources, setSources] = useState(['All']);
+  const [selectedSource, setSelectedSource] = useState('All');
   const debounceTimer = useRef(null);
 
   useEffect(() => {
@@ -36,13 +36,13 @@ export const useNewsData = (initialQuery = '') => {
 
         if (age < CACHE_DURATION && (!query || parsed.query === query)) {
           setNews(parsed.data);
-          setSources(['all', ...new Set(parsed.data.map(item => item.source))]);
+          setSources(['All', ...new Set(parsed.data.map(item => item.source))]);
           return;
         }
 
         if (age < FALLBACK_CACHE_DURATION) {
           setNews(parsed.data);
-          setSources(['all', ...new Set(parsed.data.map(item => item.source))]);
+          setSources(['All', ...new Set(parsed.data.map(item => item.source))]);
           setTimeout(() => loadNews(true), 100);
           return;
         }
@@ -66,7 +66,7 @@ export const useNewsData = (initialQuery = '') => {
           const parsed = JSON.parse(cached);
           if (Date.now() - parsed.timestamp < CACHE_DURATION && parsed.query === query) {
             setNews(parsed.data);
-            setSources(['all', ...new Set(parsed.data.map(item => item.source))]);
+            setSources(['All', ...new Set(parsed.data.map(item => item.source))]);
             return;
           }
         }
@@ -81,7 +81,7 @@ export const useNewsData = (initialQuery = '') => {
       }));
 
       setNews(data);
-      setSources(['all', ...new Set(data.map(item => item.source))]);
+      setSources(['All', ...new Set(data.map(item => item.source))]);
     } catch {
       if (!backgroundUpdate) {
         const cached = localStorage.getItem(CACHE_KEY);
@@ -89,7 +89,7 @@ export const useNewsData = (initialQuery = '') => {
           const parsed = JSON.parse(cached);
           if (Date.now() - parsed.timestamp < FALLBACK_CACHE_DURATION) {
             setNews(parsed.data);
-            setSources(['all', ...new Set(parsed.data.map(item => item.source))]);
+            setSources(['All', ...new Set(parsed.data.map(item => item.source))]);
             setError('Using cached data. Unable to fetch latest news.');
             return;
           }
@@ -106,7 +106,7 @@ export const useNewsData = (initialQuery = '') => {
     let filtered = news;
     
     // Filter berdasarkan sumber
-    if (selectedSource !== 'all') {
+    if (selectedSource !== 'All') {
       filtered = filtered.filter(item => item.source === selectedSource);
     }
     

@@ -10,6 +10,7 @@ const NewsCard = ({ article }) => {
           <img 
             src={article.imageUrl} 
             alt={article.title}
+            loading='eager'
             className="w-full h-full object-cover"
             onError={(e) => {
               e.target.onerror = null;
